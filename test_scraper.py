@@ -1,13 +1,13 @@
-import sqlite3
+from pipeline.cleaner import load_raw_books, clean_books
 
-conn = sqlite3.connect("db/books.db")
-cursor = conn.cursor()
+df = load_raw_books()
+df = clean_books(df)
 
-cursor.execute("SELECT COUNT(*) FROM books")
-print("Total books:", cursor.fetchone())
+print("\nSample cleaned data:")
+print(df[["title", "price", "rating", "availability"]].head(10))
 
-cursor.execute("SELECT title, price, rating FROM books LIMIT 5")
-for row in cursor.fetchall():
-    print(row)
+print("\nData types:")
+print(df.dtypes)
 
-conn.close()
+print("\nPrice stats:")
+print(df["price"].describe())
